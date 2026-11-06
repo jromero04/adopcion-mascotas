@@ -25,13 +25,67 @@
         La mascota se registró correctamente.
     </p>
 
-    <section class="vacio" th:if="${#lists.isEmpty(mascotas)}">
+    <form class="filtros" th:action="@{/mascotas}" th:object="${filtro}" method="get">
+        <div class="campo">
+            <label for="especie">Especie</label>
+            <select id="especie" th:field="*{especie}">
+                <option value="">Todas</option>
+                <option th:each="opcion : ${especies}"
+                        th:value="${opcion}"
+                        th:text="${opcion.nombreVisible}"></option>
+            </select>
+        </div>
+
+        <div class="campo">
+            <label for="sexo">Sexo</label>
+            <select id="sexo" th:field="*{sexo}">
+                <option value="">Todos</option>
+                <option th:each="opcion : ${sexos}"
+                        th:value="${opcion}"
+                        th:text="${opcion.nombreVisible}"></option>
+            </select>
+        </div>
+
+        <div class="campo">
+            <label for="edadMinima">Edad mínima</label>
+            <input id="edadMinima" type="number" min="0" th:field="*{edadMinima}" placeholder="Meses">
+            <p class="error" th:if="${#fields.hasErrors('edadMinima')}" th:errors="*{edadMinima}"></p>
+        </div>
+
+        <div class="campo">
+            <label for="edadMaxima">Edad máxima</label>
+            <input id="edadMaxima" type="number" min="0" th:field="*{edadMaxima}" placeholder="Meses">
+            <p class="error" th:if="${#fields.hasErrors('edadMaxima')}" th:errors="*{edadMaxima}"></p>
+        </div>
+
+        <div class="acciones-filtros">
+            <button class="boton" type="submit">Buscar</button>
+            <a class="boton secundario" th:href="@{/mascotas}">Limpiar</a>
+        </div>
+
+        <div class="errores-filtros" th:if="${#fields.hasErrors('rangoValido')}">
+            <p class="error" th:errors="*{rangoValido}"></p>
+        </div>
+    </form>
+
+    <section class="vacio" th:if="${filtrosInvalidos}">
+        <h2>Revisá los filtros ingresados</h2>
+        <p>Corregí los valores señalados o limpiá los filtros para volver al catálogo completo.</p>
+    </section>
+
+    <section class="vacio" th:if="${!filtrosInvalidos and #lists.isEmpty(mascotas) and filtro.activo}">
+        <h2>No encontramos mascotas con esos filtros</h2>
+        <p>Probá modificando algún criterio o volvé al catálogo completo.</p>
+        <a class="boton secundario" th:href="@{/mascotas}">Limpiar filtros</a>
+    </section>
+
+    <section class="vacio" th:if="${!filtrosInvalidos and #lists.isEmpty(mascotas) and !filtro.activo}">
         <h2>Todavía no hay mascotas registradas</h2>
         <p>Podés crear el primer registro desde el formulario.</p>
         <a class="boton" th:href="@{/mascotas/nueva}">Registrar mascota</a>
     </section>
 
-    <section class="grilla" th:unless="${#lists.isEmpty(mascotas)}">
+    <section class="grilla" th:if="${!filtrosInvalidos and !#lists.isEmpty(mascotas)}">
         <article class="tarjeta" th:each="mascota : ${mascotas}">
             <img th:src="${mascota.fotoUrl}"
                  src="/images/mascota-sin-foto.svg"

@@ -10,8 +10,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import uy.edu.um.adopcion.registro.modelo.Especie;
 import uy.edu.um.adopcion.registro.modelo.Sexo;
 import uy.edu.um.adopcion.registro.servicio.RegistroMascotaService;
+import uy.edu.um.adopcion.web.formulario.FiltroMascotas;
 import uy.edu.um.adopcion.web.formulario.MascotaForm;
 import uy.edu.um.adopcion.web.servicio.CatalogoMascotasService;
+
+import java.util.List;
 
 @Controller
 public class MascotaController {
@@ -52,8 +55,17 @@ public class MascotaController {
     }
 
     @GetMapping("/mascotas")
-    public String mostrarCatalogo(Model model) {
-        model.addAttribute("mascotas", catalogoMascotasService.listar());
+    public String mostrarCatalogo(
+            @Valid @ModelAttribute("filtro") FiltroMascotas filtro,
+            BindingResult bindingResult,
+            Model model
+    ) {
+        agregarOpciones(model);
+        model.addAttribute("filtrosInvalidos", bindingResult.hasErrors());
+        model.addAttribute(
+                "mascotas",
+                bindingResult.hasErrors() ? List.of() : catalogoMascotasService.buscar(filtro)
+        );
         return "mascotas/catalogo";
     }
 

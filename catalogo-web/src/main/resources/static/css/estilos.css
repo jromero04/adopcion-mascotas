@@ -70,6 +70,21 @@ h2 { margin-top: 0; }
 .mensaje { padding: 1rem; border-radius: .7rem; }
 .exito { background: #dcefe3; color: #194d32; }
 
+.filtros {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(130px, 1fr)) auto;
+    align-items: start;
+    gap: 1rem;
+    margin: 1.5rem 0;
+    padding: 1rem;
+    border: 1px solid #e2ded2;
+    border-radius: 1rem;
+    background: #fff;
+}
+.filtros .campo { margin-bottom: 0; }
+.acciones-filtros { display: flex; gap: .5rem; padding-top: 1.65rem; }
+.errores-filtros { grid-column: 1 / -1; }
+
 .titulo-con-accion { display: flex; justify-content: space-between; align-items: end; gap: 1rem; }
 .grilla { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.2rem; }
 .tarjeta { overflow: hidden; border: 1px solid #e2ded2; border-radius: 1rem; background: #fff; }
@@ -85,4 +100,11 @@ h2 { margin-top: 0; }
     .encabezado, .titulo-con-accion { align-items: flex-start; flex-direction: column; }
     .fila { grid-template-columns: 1fr; gap: 0; }
     .portada { padding: 4rem 0; }
+    .filtros { grid-template-columns: 1fr; }
+    .acciones-filtros { padding-top: 0; }
+}
+
+@media (min-width: 621px) and (max-width: 980px) {
+    .filtros { grid-template-columns: 1fr 1fr; }
+    .acciones-filtros { padding-top: 0; }
 }

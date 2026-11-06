@@ -10,6 +10,7 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import uy.edu.um.adopcion.registro.modelo.Especie;
 import uy.edu.um.adopcion.registro.modelo.Sexo;
 import uy.edu.um.adopcion.registro.servicio.RegistroMascotaService;
+import uy.edu.um.adopcion.web.formulario.FiltroMascotas;
 import uy.edu.um.adopcion.web.formulario.MascotaForm;
 import uy.edu.um.adopcion.web.servicio.CatalogoMascotasService;
 
@@ -41,13 +42,29 @@ class MascotaControllerTest {
     @Test
     void muestraCatalogoConMascotasDelServicio() {
         var mascotas = List.of(new MascotaForm().aMascota());
-        when(catalogoMascotasService.listar()).thenReturn(mascotas);
+        FiltroMascotas filtro = new FiltroMascotas();
+        when(catalogoMascotasService.buscar(filtro)).thenReturn(mascotas);
         var model = new ExtendedModelMap();
+        var errores = new BeanPropertyBindingResult(filtro, "filtro");
 
-        String vista = controller.mostrarCatalogo(model);
+        String vista = controller.mostrarCatalogo(filtro, errores, model);
 
         assertEquals("mascotas/catalogo", vista);
         assertSame(mascotas, model.get("mascotas"));
+    }
+
+    @Test
+    void noBuscaCuandoLosFiltrosSonInvalidos() {
+        FiltroMascotas filtro = new FiltroMascotas();
+        var errores = new BeanPropertyBindingResult(filtro, "filtro");
+        errores.reject("rango.invalido", "El rango es inválido");
+        var model = new ExtendedModelMap();
+
+        String vista = controller.mostrarCatalogo(filtro, errores, model);
+
+        assertEquals("mascotas/catalogo", vista);
+        assertEquals(true, model.get("filtrosInvalidos"));
+        verify(catalogoMascotasService, never()).buscar(any());
     }
 
     @Test
