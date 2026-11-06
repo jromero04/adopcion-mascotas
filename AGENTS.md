@@ -118,7 +118,10 @@ Aplicar las validaciones en el servidor además de las ayudas del formulario. No
 - `registro-mascotas` contiene el modelo, las validaciones, el repositorio JPA y el servicio de registro.
 - El 06/11/2026 se ejecutó `mvn clean verify` con Java 21: los dos módulos se construyeron y las 7 pruebas unitarias de registro finalizaron sin fallos.
 - `catalogo-web` usa H2 en archivo para desarrollo y permite configurar otra ubicación mediante `ADOPCION_DB_URL`.
-- El 06/11/2026 se inició el JAR, se verificó la conexión H2 y la ruta `/` respondió HTTP 200. Todavía no están implementados el formulario, el catálogo ni los filtros.
+- El 06/11/2026 se inició el JAR, se verificó la conexión H2 y la ruta `/` respondió HTTP 200.
+- `catalogo-web` contiene el formulario de registro, el catálogo con imagen de respaldo y filtros combinables por especie, sexo y rango de edad.
+- Se verificaron mediante HTTP el registro, el catálogo, los filtros individuales y combinados, los límites inclusivos, las edades desconocidas, la búsqueda vacía y el mensaje de rango inválido.
+- El 06/11/2026 se ejecutó nuevamente `mvn clean verify`: las 7 pruebas de `registro-mascotas` y las 16 pruebas de `catalogo-web` finalizaron sin fallos.
 - El repositorio remoto de GitHub está configurado. No se verificaron mediante herramientas la protección efectiva de `main`, Jenkins ni el despliegue.
 
 ## Forma de trabajo
