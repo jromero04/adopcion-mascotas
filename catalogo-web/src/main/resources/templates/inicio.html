@@ -1,13 +1,28 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Adopción de mascotas</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
 </head>
 <body>
-<h1>Adopción de mascotas</h1>
-<p>Encuentra un hogar para una mascota.</p>
-<p>Próximamente, podrás registrar mascotas y consultar el catálogo.</p>
+<header class="encabezado">
+    <a class="marca" th:href="@{/}">Adopción de mascotas</a>
+    <nav>
+        <a th:href="@{/mascotas}">Ver catálogo</a>
+        <a class="boton" th:href="@{/mascotas/nueva}">Registrar mascota</a>
+    </nav>
+</header>
+
+<main class="portada">
+    <p class="etiqueta">Mascotas encontradas</p>
+    <h1>Ayudemos a cada mascota a volver a un hogar.</h1>
+    <p>Registrá una mascota encontrada o consultá el catálogo disponible.</p>
+    <div class="acciones">
+        <a class="boton" th:href="@{/mascotas/nueva}">Registrar mascota</a>
+        <a class="boton secundario" th:href="@{/mascotas}">Explorar catálogo</a>
+    </div>
+</main>
 </body>
 </html>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Catálogo de mascotas</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+<header class="encabezado">
+    <a class="marca" th:href="@{/}">Adopción de mascotas</a>
+    <nav><a class="boton" th:href="@{/mascotas/nueva}">Registrar mascota</a></nav>
+</header>
+
+<main class="contenedor">
+    <div class="titulo-con-accion">
+        <div>
+            <p class="etiqueta">Mascotas encontradas</p>
+            <h1>Catálogo</h1>
+        </div>
+        <a class="boton" th:href="@{/mascotas/nueva}">Registrar mascota</a>
+    </div>
+
+    <p class="mensaje exito" th:if="${param.registrada != null}">
+        La mascota se registró correctamente.
+    </p>
+
+    <section class="vacio" th:if="${#lists.isEmpty(mascotas)}">
+        <h2>Todavía no hay mascotas registradas</h2>
+        <p>Podés crear el primer registro desde el formulario.</p>
+        <a class="boton" th:href="@{/mascotas/nueva}">Registrar mascota</a>
+    </section>
+
+    <section class="grilla" th:unless="${#lists.isEmpty(mascotas)}">
+        <article class="tarjeta" th:each="mascota : ${mascotas}">
+            <img th:src="${mascota.fotoUrl}"
+                 src="/images/mascota-sin-foto.svg"
+                 onerror="this.onerror=null;this.src='/images/mascota-sin-foto.svg';"
+                 th:alt="${mascota.nombre != null ? 'Foto de ' + mascota.nombre : 'Foto de mascota sin nombre'}">
+            <div class="tarjeta-contenido">
+                <h2 th:text="${mascota.nombre != null ? mascota.nombre : 'Sin nombre'}">Sin nombre</h2>
+                <dl>
+                    <div><dt>Especie</dt><dd th:text="${mascota.especie.nombreVisible}"></dd></div>
+                    <div><dt>Sexo</dt><dd th:text="${mascota.sexo.nombreVisible}"></dd></div>
+                    <div>
+                        <dt>Edad</dt>
+                        <dd th:text="${mascota.edadMeses != null ? mascota.edadMeses + ' meses' : 'Desconocida'}"></dd>
+                    </div>
+                </dl>
+                <p th:if="${mascota.descripcion != null}" th:text="${mascota.descripcion}"></p>
+            </div>
+        </article>
+    </section>
+</main>
+</body>
+</html>

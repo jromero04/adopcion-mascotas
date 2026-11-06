@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Registrar mascota</title>
+    <link rel="stylesheet" th:href="@{/css/estilos.css}">
+</head>
+<body>
+<header class="encabezado">
+    <a class="marca" th:href="@{/}">Adopción de mascotas</a>
+    <nav><a th:href="@{/mascotas}">Ver catálogo</a></nav>
+</header>
+
+<main class="contenedor angosto">
+    <p class="etiqueta">Nuevo registro</p>
+    <h1>Registrar una mascota encontrada</h1>
+    <p>Los campos marcados con * son obligatorios.</p>
+
+    <form class="formulario" th:action="@{/mascotas}" th:object="${mascotaForm}" method="post">
+        <div class="campo">
+            <label for="nombre">Nombre</label>
+            <input id="nombre" type="text" maxlength="100" th:field="*{nombre}"
+                   placeholder="Dejalo vacío si no se conoce">
+        </div>
+
+        <div class="fila">
+            <div class="campo">
+                <label for="especie">Especie *</label>
+                <select id="especie" th:field="*{especie}" required>
+                    <option value="">Seleccioná una opción</option>
+                    <option th:each="opcion : ${especies}"
+                            th:value="${opcion}"
+                            th:text="${opcion.nombreVisible}"></option>
+                </select>
+                <p class="error" th:if="${#fields.hasErrors('especie')}" th:errors="*{especie}"></p>
+            </div>
+
+            <div class="campo">
+                <label for="sexo">Sexo *</label>
+                <select id="sexo" th:field="*{sexo}" required>
+                    <option th:each="opcion : ${sexos}"
+                            th:value="${opcion}"
+                            th:text="${opcion.nombreVisible}"></option>
+                </select>
+                <p class="error" th:if="${#fields.hasErrors('sexo')}" th:errors="*{sexo}"></p>
+            </div>
+        </div>
+
+        <div class="campo">
+            <label for="edadMeses">Edad aproximada, en meses</label>
+            <input id="edadMeses" type="number" min="0" th:field="*{edadMeses}"
+                   placeholder="Dejalo vacío si no se conoce">
+            <p class="error" th:if="${#fields.hasErrors('edadMeses')}" th:errors="*{edadMeses}"></p>
+        </div>
+
+        <div class="campo">
+            <label for="descripcion">Descripción</label>
+            <textarea id="descripcion" maxlength="1000" rows="4" th:field="*{descripcion}"
+                      placeholder="Señas particulares, lugar donde fue encontrada..."></textarea>
+        </div>
+
+        <div class="campo">
+            <label for="fotoUrl">URL de la foto *</label>
+            <input id="fotoUrl" type="url" th:field="*{fotoUrl}" required
+                   placeholder="https://ejemplo.com/foto">
+            <small>Debe ser un enlace directo HTTP o HTTPS a una imagen.</small>
+            <p class="error" th:if="${#fields.hasErrors('fotoUrl')}" th:errors="*{fotoUrl}"></p>
+        </div>
+
+        <div class="acciones">
+            <button class="boton" type="submit">Guardar mascota</button>
+            <a class="boton secundario" th:href="@{/mascotas}">Cancelar</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>
