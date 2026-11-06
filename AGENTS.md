@@ -114,11 +114,12 @@ Aplicar las validaciones en el servidor además de las ayudas del formulario. No
 
 ## Estado conocido al redactar este archivo
 
-- La usuaria creó el proyecto principal y los dos módulos siguiendo los pasos de la conversación.
-- Confirmó `BUILD SUCCESS` al ejecutar `validate` desde Maven. Esto valida la estructura inicial; no demuestra todavía compilación, pruebas ni despliegue.
-- Se proporcionaron instrucciones para configurar Spring Boot, `AdopcionApplication`, `InicioController` y `templates/inicio.html`.
-- Aún no se confirmó que esos últimos archivos estén creados ni que la página inicial arranque. Verificar el repositorio y la ejecución antes de continuar.
-- No se confirmó la configuración del repositorio GitHub, su protección de rama, Jenkins ni el despliegue.
+- El proyecto principal y los módulos `registro-mascotas` y `catalogo-web` están creados.
+- `registro-mascotas` contiene el modelo, las validaciones, el repositorio JPA y el servicio de registro.
+- El 06/11/2026 se ejecutó `mvn clean verify` con Java 21: los dos módulos se construyeron y las 7 pruebas unitarias de registro finalizaron sin fallos.
+- `catalogo-web` usa H2 en archivo para desarrollo y permite configurar otra ubicación mediante `ADOPCION_DB_URL`.
+- El 06/11/2026 se inició el JAR, se verificó la conexión H2 y la ruta `/` respondió HTTP 200. Todavía no están implementados el formulario, el catálogo ni los filtros.
+- El repositorio remoto de GitHub está configurado. No se verificaron mediante herramientas la protección efectiva de `main`, Jenkins ni el despliegue.
 
 ## Forma de trabajo
 
