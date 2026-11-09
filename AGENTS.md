@@ -122,6 +122,8 @@ Aplicar las validaciones en el servidor además de las ayudas del formulario. No
 - `catalogo-web` contiene el formulario de registro, el catálogo con imagen de respaldo y filtros combinables por especie, sexo y rango de edad.
 - Se verificaron mediante HTTP el registro, el catálogo, los filtros individuales y combinados, los límites inclusivos, las edades desconocidas, la búsqueda vacía y el mensaje de rango inválido.
 - El 06/11/2026 se ejecutó nuevamente `mvn clean verify`: las 7 pruebas de `registro-mascotas` y las 16 pruebas de `catalogo-web` finalizaron sin fallos.
+- El 09/11/2026 se configuró Maven Failsafe y se agregó una prueba de integración que levanta la aplicación con H2 en memoria, registra una mascota por HTTP y verifica su persistencia, catálogo y búsqueda. `mvn clean verify` ejecutó 23 pruebas unitarias y 1 de integración sin fallos.
+- El 09/11/2026 se agregó un `Jenkinsfile` declarativo base para Windows con checkout, verificación del entorno, compilación, pruebas unitarias, pruebas de integración, empaquetado, publicación JUnit y archivado del JAR. La secuencia Maven equivalente se verificó localmente con éxito; el archivo todavía no fue ejecutado por Jenkins.
 - El repositorio remoto de GitHub está configurado. No se verificaron mediante herramientas la protección efectiva de `main`, Jenkins ni el despliegue.
 
 ## Forma de trabajo
