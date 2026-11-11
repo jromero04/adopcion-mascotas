@@ -110,6 +110,12 @@ Una ejecución local inicial de `mvn clean verify` tomó Java 17 y falló con `r
 | #9 | Evidencia de la activación automática |
 | #10 | Documento consolidado de evidencias CI/CD |
 
+## Protección de `main`
+
+El 11/11/2026 se consultó la configuración mediante la API de GitHub. La ruleset `Protección de main` aparece activa, apunta a la rama predeterminada y no tiene actores con permiso de bypass. Sus reglas exigen una pull request con una aprobación, descartan aprobaciones cuando se agregan commits y requieren resolver las conversaciones. También bloquean la eliminación de la rama y los force pushes. No se exigen status checks porque el Jenkins local no publica checks en GitHub.
+
+La PR creada desde `docs/verificar-proteccion-main` se utiliza para comprobar funcionalmente que GitHub impide el merge antes de la aprobación de la otra integrante. El resultado de esa comprobación debe registrarse antes de integrar la rama.
+
 ## Demostración de falla controlada
 
 La rama temporal `demo/falla-controlada-pipeline` agregó `FallaControladaPipelineTest`, una prueba que falla con el mensaje `FALLA CONTROLADA: verificar que Jenkins no ejecute el despliegue`. La prueba se validó localmente y luego se construyó manualmente en Jenkins. Esta rama no se integró a `main`.

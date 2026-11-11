@@ -203,7 +203,7 @@ Jenkins publica los XML de Surefire y Failsafe mediante JUnit, y archiva el JAR 
 - No hacer push directo a `main`.
 - No versionar `target/`, bases H2, logs, credenciales ni configuración personal del IDE.
 
-La configuración efectiva de protección de `main` debe verificarse en GitHub; no se considera activa solamente por estar acordada por el equipo.
+El repositorio tiene una ruleset activa sobre `main` que exige pull request, una aprobación y resolución de conversaciones, descarta aprobaciones obsoletas y bloquea eliminaciones y force pushes. La validación funcional del bloqueo se registra en el documento de evidencias.
 
 ## Evidencias
 

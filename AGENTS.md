@@ -131,7 +131,7 @@ Aplicar las validaciones en el servidor además de las ayudas del formulario. No
 - El 11/11/2026 se agregó `docs/evidencias-ci-cd.md` con el entorno, las etapas, los resultados de pruebas, el historial real de Jenkins, el despliegue, el rollback y los problemas efectivamente observados. El documento se actualizó con las construcciones #1 a #9.
 - El 11/11/2026 se ejecutó la demostración planificada desde `demo/falla-controlada-pipeline`: la construcción #8 falló en pruebas unitarias, omitió integración, empaquetado, despliegue y smoke test, mientras la aplicación anterior conservó PID, hash del JAR y respuesta HTTP 200. El job se restauró a `main` y la construcción #9 finalizó con `SUCCESS`. La rama de demostración no debe integrarse.
 - El 11/11/2026 se agregó `README.md` con descripción funcional, arquitectura, requisitos, comandos reproducibles de construcción y pruebas, ejecución de desarrollo, separación de ambientes, despliegue local, configuración de Jenkins, colaboración y enlace a las evidencias.
-- El repositorio remoto de GitHub está configurado. No se verificó mediante herramientas la protección efectiva de `main`.
+- El 11/11/2026 la API de GitHub confirmó una ruleset activa sobre `main`, sin bypass, que exige pull request, una aprobación y resolución de conversaciones, descarta aprobaciones obsoletas y bloquea eliminaciones y force pushes. La prueba funcional mediante una PR sin aprobar continúa pendiente.
 
 ## Forma de trabajo
 
