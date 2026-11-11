@@ -75,7 +75,7 @@ function Get-DeployedProcess {
         return $null
     }
 
-    if (-not $process.CommandLine.Contains($currentJar, [System.StringComparison]::OrdinalIgnoreCase)) {
+    if ($process.CommandLine.IndexOf($currentJar, [System.StringComparison]::OrdinalIgnoreCase) -lt 0) {
         throw "El PID $processId pertenece a otro proceso; no se detendra automaticamente"
     }
 
