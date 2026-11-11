@@ -115,4 +115,3 @@ La tarea siguiente realizará una falla controlada en una rama de demostración.
 3. la versión desplegada anteriormente continúa respondiendo;
 4. el cambio de demostración no se integra a `main`;
 5. la evidencia se identifica como una prueba planificada y no como un incidente real.
-
