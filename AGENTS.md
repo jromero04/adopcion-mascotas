@@ -88,7 +88,7 @@ Aplicar las validaciones en el servidor además de las ayudas del formulario. No
 ## Jenkins y despliegue
 
 - Pipeline declarativo en `Jenkinsfile`, dentro del repositorio.
-- Detectar automáticamente cambios en GitHub. La propuesta base es desplegar cambios de `main`; usar webhook o consulta periódica según la conectividad disponible. La configuración concreta del disparador sigue pendiente.
+- Detectar automáticamente cambios en GitHub. La configuración verificada construye `main` y utiliza `pollSCM('H/5 * * * *')` para consultar periódicamente el repositorio; las construcciones automáticas con causa `SCMTriggerCause` fueron comprobadas.
 - Secuencia: checkout, compilación, pruebas unitarias, pruebas de integración, empaquetado, despliegue y comprobación de respuesta de la aplicación.
 - Si falla la compilación o una prueba, detener el proceso antes del despliegue y conservar funcionando la versión anterior.
 - Desplegar el `.jar` de `catalogo-web` en un ambiente local de producción simulado. Automatizar la actualización y el arranque; no limitarse a compilar o copiar el archivo sin mostrar la aplicación funcionando.
