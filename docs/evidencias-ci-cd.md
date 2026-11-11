@@ -2,7 +2,7 @@
 
 ## Alcance
 
-Este documento registra las verificaciones reales realizadas hasta el 11/11/2026 sobre el pipeline de CI/CD del proyecto. Las ejecuciones exitosas, los ajustes preventivos y las demostraciones controladas se presentan por separado para no describir pruebas planificadas como incidentes reales.
+Este documento registra las verificaciones reales realizadas hasta la construcción #9 del 11/11/2026 sobre el pipeline de CI/CD del proyecto. Las ejecuciones exitosas, los ajustes preventivos y las demostraciones controladas se presentan por separado para no describir pruebas planificadas como incidentes reales.
 
 ## Entorno verificado
 
@@ -62,8 +62,11 @@ El artefacto generado y archivado es `catalogo-web/target/catalogo-web-1.0.0-SNA
 | #4 | 11/11/2026 07:51 | Manual | `0cb2aa3`, `main` | Primera ejecución completa desde `main` | `SUCCESS` |
 | #5 | 11/11/2026 07:57 | `SCMTriggerCause` | `d57a6e7`, `main` | Primera activación automática comprobada | `SUCCESS` |
 | #6 | 11/11/2026 08:02 | `SCMTriggerCause` | `694321b`, `main` | Segunda activación automática comprobada | `SUCCESS` |
+| #7 | 11/11/2026 09:02 | `SCMTriggerCause` | `b13ae44`, `main` | Activación automática tras integrar las evidencias | `SUCCESS` |
+| #8 | 11/11/2026 09:12 | Manual | `c77d360`, `demo/falla-controlada-pipeline` | Demostración planificada de una prueba unitaria fallida | `FAILURE` esperado |
+| #9 | 11/11/2026 09:16 | Manual | `b13ae44`, `main` | Restauración del job y nueva ejecución completa | `SUCCESS` |
 
-En las construcciones #3 a #6, el log registra tanto `Despliegue correcto` como `Comprobacion correcta. HTTP 200`. La construcción #5 demuestra que el cambio de la PR #8 fue detectado sin presionar **Construir ahora**. La #6 confirma que el comportamiento se repitió después de la PR #9.
+En las construcciones #3 a #7 y #9, el log registra tanto `Despliegue correcto` como `Comprobacion correcta. HTTP 200`. La construcción #5 demuestra que el cambio de la PR #8 fue detectado sin presionar **Construir ahora**. Las #6 y #7 confirman que el comportamiento se repitió después de cambios posteriores.
 
 ## Despliegue, persistencia y recuperación
 
@@ -80,7 +83,7 @@ Se verificó un segundo despliegue y los datos registrados permanecieron disponi
 
 ### Historial de Jenkins
 
-Hasta la construcción #6 no se registraron compilaciones fallidas en Jenkins: las seis finalizaron con `SUCCESS`. Por esta razón no se atribuye al pipeline ningún incidente que no haya ocurrido.
+Las construcciones #1 a #7 finalizaron con `SUCCESS`; no se registró una falla espontánea de Jenkins. La construcción #8 terminó en `FAILURE` como parte de una demostración planificada y se documenta como tal, no como un incidente.
 
 ### Selección inicial de rama
 
@@ -105,13 +108,19 @@ Una ejecución local inicial de `mvn clean verify` tomó Java 17 y falló con `r
 | #7 | Registro del pipeline completo exitoso |
 | #8 | Registro de la configuración del disparador |
 | #9 | Evidencia de la activación automática |
+| #10 | Documento consolidado de evidencias CI/CD |
 
-## Evidencia pendiente
+## Demostración de falla controlada
 
-La tarea siguiente realizará una falla controlada en una rama de demostración. Deberá comprobar y documentar que:
+La rama temporal `demo/falla-controlada-pipeline` agregó `FallaControladaPipelineTest`, una prueba que falla con el mensaje `FALLA CONTROLADA: verificar que Jenkins no ejecute el despliegue`. La prueba se validó localmente y luego se construyó manualmente en Jenkins. Esta rama no se integró a `main`.
 
-1. la compilación o las pruebas fallan de forma visible;
-2. Jenkins no ejecuta las etapas de despliegue ni de comprobación;
-3. la versión desplegada anteriormente continúa respondiendo;
-4. el cambio de demostración no se integra a `main`;
-5. la evidencia se identifica como una prueba planificada y no como un incidente real.
+La construcción #8 produjo la siguiente evidencia:
+
+- obtuvo la revisión `c77d360` de la rama de demostración;
+- falló en `Pruebas unitarias` por el motivo previsto;
+- Jenkins marcó `Pruebas de integracion`, `Empaquetar`, `Desplegar` y `Comprobar despliegue` como omitidas debido a la falla anterior;
+- finalizó con estado `FAILURE`.
+
+Antes de ejecutar la #8, la aplicación desplegada tenía PID `34600`, el JAR tenía SHA-256 `6F1E19EF51E194A8A980BB1A81530AB309F8B353E4BC26FB5B36F9D5B0952354` y la ruta `/` respondía HTTP 200. Después de la falla se comprobaron nuevamente los tres valores: el PID y el hash permanecieron sin cambios y la aplicación continuó respondiendo HTTP 200. Esto demuestra que una prueba fallida detiene el pipeline antes de reemplazar la versión desplegada.
+
+Finalmente, el job se restauró a `*/main`. La construcción manual #9 obtuvo `b13ae44`, ejecutó todas las etapas, desplegó con PID `10288`, pasó el smoke test HTTP y terminó con `SUCCESS`. Al finalizar, el job continuaba configurado para construir `main`.
