@@ -109,12 +109,15 @@ Una ejecución local inicial de `mvn clean verify` tomó Java 17 y falló con `r
 | #8 | Registro de la configuración del disparador |
 | #9 | Evidencia de la activación automática |
 | #10 | Documento consolidado de evidencias CI/CD |
+| #11 | Evidencia de la falla controlada |
+| #12 | README reproducible del proyecto |
+| #13 | Verificación de la protección de `main` |
 
 ## Protección de `main`
 
 El 11/11/2026 se consultó la configuración mediante la API de GitHub. La ruleset `Protección de main` aparece activa, apunta a la rama predeterminada y no tiene actores con permiso de bypass. Sus reglas exigen una pull request con una aprobación, descartan aprobaciones cuando se agregan commits y requieren resolver las conversaciones. También bloquean la eliminación de la rama y los force pushes. No se exigen status checks porque el Jenkins local no publica checks en GitHub.
 
-La PR creada desde `docs/verificar-proteccion-main` se utiliza para comprobar funcionalmente que GitHub impide el merge antes de la aprobación de la otra integrante. El resultado de esa comprobación debe registrarse antes de integrar la rama.
+La PR #13, creada desde `docs/verificar-proteccion-main`, se consultó antes de recibir revisiones. La API informó una lista de revisiones vacía y `mergeable_state: blocked`, aunque los cambios eran combinables (`mergeable: true`). Esto confirma que la ruleset impide el merge hasta recibir la aprobación exigida. Después de registrar esta evidencia, el nuevo commit continúa sujeto a la misma regla y debe ser aprobado por la otra integrante antes del merge.
 
 ## Demostración de falla controlada
 
