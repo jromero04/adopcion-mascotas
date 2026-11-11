@@ -126,6 +126,7 @@ Aplicar las validaciones en el servidor además de las ayudas del formulario. No
 - El 09/11/2026 se agregó un `Jenkinsfile` declarativo base para Windows con checkout, verificación del entorno, compilación, pruebas unitarias, pruebas de integración, empaquetado, publicación JUnit y archivado del JAR.
 - El 09/11/2026 se instaló Jenkins 2.580.2 LTS como servicio local de Windows, se configuraron Java 21 y Maven 3.9.12 y se ejecutó el pipeline desde `feature/ci-integracion-jenkins`. Las etapas finalizaron correctamente, los resultados de pruebas se publicaron, el JAR se archivó y Jenkins informó `Finished: SUCCESS`.
 - El 09/11/2026 se implementó y verificó el despliegue local de Windows en `C:\ProgramData\AdopcionMascotas\produccion`, separado del workspace de Jenkins y de desarrollo. La aplicación desplegada usa el puerto 8081 y una H2 persistente externa, conserva un JAR de respaldo y restaura automáticamente la versión anterior si la nueva no responde HTTP 200. Se comprobó un segundo despliegue con conservación de datos y un rollback controlado exitoso.
+- El 11/11/2026 se ejecutó desde Jenkins el pipeline con las etapas de despliegue y comprobación HTTP incorporadas. La construcción completa finalizó con estado `SUCCESS` y los cambios de despliegue y pipeline quedaron integrados a `main` mediante las PR #5 y #6.
 - El repositorio remoto de GitHub está configurado. No se verificó mediante herramientas la protección efectiva de `main`.
 
 ## Forma de trabajo
