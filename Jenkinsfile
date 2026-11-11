@@ -58,6 +58,27 @@ pipeline {
                 )
             }
         }
+
+        stage('Desplegar') {
+            steps {
+                bat '''
+                    powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass ^
+                        -File scripts/windows/Deploy-AdopcionMascotas.ps1 ^
+                        -ArtifactPath catalogo-web/target/catalogo-web-1.0.0-SNAPSHOT.jar ^
+                        -JavaHome "%JAVA_HOME%"
+                '''
+            }
+        }
+
+        stage('Comprobar despliegue') {
+            steps {
+                bat '''
+                    powershell.exe -NoProfile -NonInteractive -ExecutionPolicy Bypass ^
+                        -File scripts/windows/Test-AdopcionMascotas.ps1 ^
+                        -Uri http://127.0.0.1:8081/
+                '''
+            }
+        }
     }
 
     post {
