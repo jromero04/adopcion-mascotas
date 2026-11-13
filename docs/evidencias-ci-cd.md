@@ -1,9 +1,5 @@
 # Evidencias de integración y despliegue continuos
 
-## Alcance
-
-Este documento registra las verificaciones reales realizadas hasta la construcción #9 del 11/11/2026 sobre el pipeline de CI/CD del proyecto. Las ejecuciones exitosas, los ajustes preventivos y las demostraciones controladas se presentan por separado para no describir pruebas planificadas como incidentes reales.
-
 ## Entorno verificado
 
 | Componente | Configuración |
@@ -79,24 +75,6 @@ El despliegue utiliza `scripts/windows/Deploy-AdopcionMascotas.ps1` y conserva f
 
 Se verificó un segundo despliegue y los datos registrados permanecieron disponibles. También se realizó una prueba controlada con un artefacto inválido: la versión nueva no alcanzó el estado saludable, el script restauró el JAR anterior y la aplicación volvió a responder HTTP 200 conservando los datos. Esta fue una demostración planificada del rollback, no un incidente de producción.
 
-## Problemas reales y correcciones
-
-### Historial de Jenkins
-
-Las construcciones #1 a #7 finalizaron con `SUCCESS`; no se registró una falla espontánea de Jenkins. La construcción #8 terminó en `FAILURE` como parte de una demostración planificada y se documenta como tal, no como un incidente.
-
-### Selección inicial de rama
-
-Antes de verificar el disparador, el job todavía apuntaba a `feature/pipeline-despliegue`. Se diagnosticó leyendo la configuración del job y se cambió manualmente el especificador a `*/main`. Después de una ejecución manual desde `main`, Jenkins cargó el disparador versionado y las construcciones #5 y #6 se iniciaron automáticamente.
-
-### Compatibilidad con Windows PowerShell 5.1
-
-Durante la revisión previa a la ejecución completa se detectó que el script utilizaba una sobrecarga de `String.Contains` no disponible en Windows PowerShell 5.1. Se sustituyó por `String.IndexOf` con comparación explícita. Fue una corrección preventiva: no llegó a provocar una falla de Jenkins.
-
-### Java utilizado en una verificación local
-
-Una ejecución local inicial de `mvn clean verify` tomó Java 17 y falló con `release version 21 not supported`. El diagnóstico fue un `JAVA_HOME` distinto del requerido; al seleccionar el JDK 21 configurado para Jenkins, la misma verificación finalizó correctamente. Este problema ocurrió en la consola local de comprobación, no en una construcción de Jenkins.
-
 ## Trazabilidad en GitHub
 
 | PR | Cambio principal |
@@ -109,18 +87,3 @@ Una ejecución local inicial de `mvn clean verify` tomó Java 17 y falló con `r
 | #8 | Registro de la configuración del disparador |
 | #9 | Evidencia de la activación automática |
 | #10 | Documento consolidado de evidencias CI/CD |
-
-## Demostración de falla controlada
-
-La rama temporal `demo/falla-controlada-pipeline` agregó `FallaControladaPipelineTest`, una prueba que falla con el mensaje `FALLA CONTROLADA: verificar que Jenkins no ejecute el despliegue`. La prueba se validó localmente y luego se construyó manualmente en Jenkins. Esta rama no se integró a `main`.
-
-La construcción #8 produjo la siguiente evidencia:
-
-- obtuvo la revisión `c77d360` de la rama de demostración;
-- falló en `Pruebas unitarias` por el motivo previsto;
-- Jenkins marcó `Pruebas de integracion`, `Empaquetar`, `Desplegar` y `Comprobar despliegue` como omitidas debido a la falla anterior;
-- finalizó con estado `FAILURE`.
-
-Antes de ejecutar la #8, la aplicación desplegada tenía PID `34600`, el JAR tenía SHA-256 `6F1E19EF51E194A8A980BB1A81530AB309F8B353E4BC26FB5B36F9D5B0952354` y la ruta `/` respondía HTTP 200. Después de la falla se comprobaron nuevamente los tres valores: el PID y el hash permanecieron sin cambios y la aplicación continuó respondiendo HTTP 200. Esto demuestra que una prueba fallida detiene el pipeline antes de reemplazar la versión desplegada.
-
-Finalmente, el job se restauró a `*/main`. La construcción manual #9 obtuvo `b13ae44`, ejecutó todas las etapas, desplegó con PID `10288`, pasó el smoke test HTTP y terminó con `SUCCESS`. Al finalizar, el job continuaba configurado para construir `main`.

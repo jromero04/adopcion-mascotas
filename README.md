@@ -179,6 +179,8 @@ Los nombres deben coincidir con los declarados en el `Jenkinsfile`.
 8. Guardar y ejecutar una primera construcción manual.
 
 Esa primera ejecución carga el disparador versionado `pollSCM('H/5 * * * *')`. Luego Jenkins consulta Git aproximadamente cada cinco minutos y construye cuando detecta una revisión nueva de `main`.
+Para una demostración de falla controlada, se puede ejecutar manualmente el job con la rama `demo/falla-controlada-pipeline`.
+Para una ejecución del disparador más rápida, se puede cambiar temporalmente a `pollSCM('* * * * *')` y luego restaurar a cinco minutos.
 
 ### Etapas
 
@@ -203,10 +205,9 @@ Jenkins publica los XML de Surefire y Failsafe mediante JUnit, y archiva el JAR 
 - No hacer push directo a `main`.
 - No versionar `target/`, bases H2, logs, credenciales ni configuración personal del IDE.
 
-La configuración efectiva de protección de `main` debe verificarse en GitHub; no se considera activa solamente por estar acordada por el equipo.
 
 ## Evidencias
 
-Los resultados de pruebas, construcciones de Jenkins, disparadores automáticos, despliegues, rollback y demostración de falla controlada están registrados en [docs/evidencias-ci-cd.md](docs/evidencias-ci-cd.md).
+El siguiente archivo contiene un resumen de las verificaciones [docs/evidencias-ci-cd.md](docs/evidencias-ci-cd.md).
 
 La rama `demo/falla-controlada-pipeline` contiene una prueba intencionalmente fallida utilizada únicamente como evidencia. No debe integrarse a `main`.
